@@ -1,13 +1,19 @@
-pgrades = {
-    0: range(0, 30),
-    1: range(30, 50),
-    2: range(50, 80),
-    3: range(80, 100)
+prows = {
+    0: list(range(0, 20)),
+    1: list(range(20, 40)),
+    2: list(range(40, 70)),
+    3: list(range(70, 80)),
+    4: list(range(80, 100))
 }
+grades = [94, 87, 66, 20, 50]
 class studentBody():
-    def Grades(self, name, grade):
+    def __init__(self, name, grades):
         self.name = name
-        self.grade = grade
-student = studentBody()
-print(student.name('jannice', 0))
-print(range(4, 8))
+        self.grades = grades
+
+    def GetGrades():
+        
+
+student = studentBody('jessica', rows)
+
+print()
