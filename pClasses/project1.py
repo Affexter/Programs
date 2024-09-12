@@ -1,3 +1,5 @@
+## Grade into grade letter converter
+
 AccRange = {
     'F': list(range(0, 20)),
     'D': list(range(20, 40)),
@@ -5,7 +7,7 @@ AccRange = {
     'B': list(range(70, 80)),
     'A': list(range(80, 100))
 }
-Grades = [94, 87, 66, 20, 50]
+Grades = [0, 10, 40, 40, 10]
 
 class StudentBody:
     def __init__(self, name, grades):
@@ -13,10 +15,15 @@ class StudentBody:
         self.grades = grades
 
     def get_grades(self):
+        grade_list = []
         for val in self.grades:
-            for num, range_list in AccRange.items():
+            for grade_letter, range_list in AccRange.items():
                 if val in range_list:
-                    print(num, range_list)
+                    grade_list.append(grade_letter)
+                    break
+        return grade_list
+                    
 
 student = StudentBody('Jessica', Grades)
-student.get_grades()
+
+print(f'Student Name = {student.name}, Grades = {student.get_grades()}')
