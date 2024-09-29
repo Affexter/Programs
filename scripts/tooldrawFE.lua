@@ -4,21 +4,18 @@
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 
-
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "WhiteboardGUI"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 
-
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 400, 0, 300)
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+mainFrame.Size = UDim2.new(0, 600, 0, 450)  -- Increased size from 400x300 to 600x450
+mainFrame.Position = UDim2.new(0.5, -300, 0.5, -225)  -- Adjusted position to center the larger frame
 mainFrame.BackgroundColor3 = Color3.new(1, 1, 1)
 mainFrame.BorderSizePixel = 2
 mainFrame.Parent = screenGui
-
 
 local titleBar = Instance.new("Frame")
 titleBar.Name = "TitleBar"
@@ -51,7 +48,7 @@ closeButton.Parent = titleBar
 
 local drawingArea = Instance.new("Frame")
 drawingArea.Name = "DrawingArea"
-drawingArea.Size = UDim2.new(1, -20, 1, -70)
+drawingArea.Size = UDim2.new(1, -20, 1, -70)  -- Adjusted to fill the larger main frame
 drawingArea.Position = UDim2.new(0, 10, 0, 40)
 drawingArea.BackgroundColor3 = Color3.new(0.95, 0.95, 0.95)
 drawingArea.BorderSizePixel = 1
@@ -91,7 +88,7 @@ local function treeDraw(pos)
         if tool:FindFirstChild("Handle") then
             tool.Parent = char
 
-            local gripOffset = Vector3.new(pos.X / 15, 0.5, pos.Y / 15)
+            local gripOffset = Vector3.new(pos.X / 10, 0, pos.Y / 10)
 
             tool.Grip = CFrame.new(gripOffset)
 
