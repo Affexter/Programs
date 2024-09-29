@@ -5,8 +5,8 @@ local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "WhiteboardGUI"
-screenGui.ResetOnSpawn = false
+screenGui.Name = "FEDraw By Affexter"
+screenGui.ResetOnSpawn = true
 screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local mainFrame = Instance.new("Frame")
