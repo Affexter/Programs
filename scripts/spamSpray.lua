@@ -1,70 +1,23 @@
-if not game:IsLoaded() then
-    game.Loaded:Wait()
-end
+local Workspace = game:GetService("Workspace")
+local Handle = Workspace:FindFirstChild('Handle')
+local player = game:GetService('Players').LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
 
-if game.PlaceId == 12109643 then -- Fencing
-    if not firetouchinterest then
-        error('firetouchinterest not supported.', 0)
+while true do
+    local torso = char:FindFirstChild("Torso")
+    if Handle and torso then
+        firetouchinterest(torso, Handle, 0)
+        firetouchinterest(torso, Handle, 1)
+    else
+        print("Handle or Torso not found")
     end
-    
-    local Workspace = game:GetService('Workspace')
-    local Players = game:GetService('Players')
-    local Player = Players.LocalPlayer
-    local Character = Player.Character
-    
-    local SprayPaint = Workspace:FindFirstChild('Handle')
-    
-    for i,v in pairs(Workspace:GetChildren()) do
-        if v.Name == 'Handle' and v:FindFirstChild('Script') and v:FindFirstChild('TouchInterest') and v:FindFirstChild('Mesh') then
-            SprayPaint = v
-        end
-    end
-    
-    if SprayPaint then
-        local LoopBroken = false
-        
-        for i,v in pairs(Character:GetChildren()) do
-            if v.Name == 'Spray' then
-                v.Parent = Character
-                v.Parent = Workspace
-            end
-        end
-        
-        for i,v in pairs(Player.Backpack:GetChildren()) do
-            if v.Name == 'Spray' then
-                v.Parent = Character
-                v.Parent = Workspace
-            end
-        end
-        
-        Player.CharacterRemoving:Connect(function()
-            LoopBroken = true
-        end)
-        
-        Character.ChildAdded:Connect(function(Obj)
-            if Obj.Name == 'Spray' and LoopBroken == false then
-                task.wait()
-                pcall(function() Obj.Handle.Mesh:Destroy() end)
-                Obj.Parent = Workspace
-            end
-        end)
-        
-        Player.Backpack.ChildAdded:Connect(function(Obj)
-            if Obj.Name == 'Spray' and LoopBroken == false then
-                task.wait()
-                Obj.Parent = Character
-                pcall(function() Obj.Handle.Mesh:Destroy() end)
-                Obj.Parent = Workspace
-            end
-        end)
-        
-        
-        while true do
-            pcall(function()
-                firetouchinterest(SprayPaint, Character.HumanoidRootPart, 0) -- touch
-                firetouchinterest(SprayPaint, Character.HumanoidRootPart, 1) -- untouch
-            end)
-            task.wait()
-        end
+
+    local spray = char:WaitForChild('Spray') or player.Backpack:WaitForChild('Spray')
+
+    if spray then
+        spray.Parent = Workspace
+    else
+        print('Spray not found')
+        break
     end
 end
