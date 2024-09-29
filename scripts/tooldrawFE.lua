@@ -28,7 +28,7 @@ titleText.Name = "TitleText"
 titleText.Size = UDim2.new(1, -60, 1, 0)
 titleText.Position = UDim2.new(0, 10, 0, 0)
 titleText.BackgroundTransparency = 1
-titleText.Text = "Whiteboard"
+titleText.Text = "ToolDraw FE By Affexter"
 titleText.Font = Enum.Font.SourceSansBold
 titleText.TextColor3 = Color3.new(1, 1, 1)
 titleText.TextSize = 18
@@ -92,6 +92,12 @@ local function treeDraw(pos)
         local tool = tools[1]
 
         if tool:FindFirstChild("Handle") then
+            local ls = tool:WaitForChild('LocalScript')
+
+            if ls then
+                ls:Destroy()
+            end
+
             tool.Parent = char
 
             local gripOffset = Vector3.new(pos.X / 10, 0, pos.Y / 10)
