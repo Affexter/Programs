@@ -92,6 +92,12 @@ local function treeDraw(pos)
         local tool = tools[1]
 
         if tool:FindFirstChild("Handle") then
+            local ls = tool:WaitForChild('LocalScript')
+
+            if ls then
+                ls:Destroy()
+            end
+
             tool.Parent = char
 
             local gripOffset = Vector3.new(pos.X / 10, 0, pos.Y / 10)
