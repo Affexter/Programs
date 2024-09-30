@@ -1,11 +1,11 @@
---AFFEXTER BABY
+-- AfexWare UT tool Draw script. (Works any game you can get alot of parts)
 
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "FEDraw By Affexter"
+screenGui.Name = "AfexWareV1.0"
 screenGui.ResetOnSpawn = true
 screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 
@@ -90,14 +90,13 @@ local function treeDraw(pos)
 
     if #tools > 0 then
         local tool = tools[1]
+        local ls = tool:WaitForChild('LocalScript')
 
-        if tool:FindFirstChild("Handle") then
-            local ls = tool:WaitForChild('LocalScript')
+        if ls then
+            ls:Destroy()
+        end
 
-            if ls then
-                ls:Destroy()
-            end
-
+        if tool:FindFirstChild("Handle") and tool.Name == 'Spray' then
             tool.Parent = char
 
             local gripOffset = Vector3.new(pos.X / 10, 0, pos.Y / 10)
@@ -108,7 +107,7 @@ local function treeDraw(pos)
             tool.Grip = tool.Grip * rotation
         end
     else
-        warn("No tools found in backpack.")
+        print('no tool')
     end
 end
 
