@@ -103,11 +103,17 @@ local function XQFJOB_fake_script() -- canvas.drawsScript
         ) + toolGripOffset
     
         local tool = backpack[1]
-
-        tool.Grip = CFrame.new(gripPosition)
-
+    
+        -- Define rotation
+        local rotationAngle = math.rad(45) -- Set rotation angle in radians
+        local rotationCFrame = CFrame.Angles(0, rotationAngle, 0) -- Rotate around Y axis (adjust axes as needed)
+    
+        -- Combine grip position with rotation
+        tool.Grip = CFrame.new(gripPosition) * rotationCFrame
+    
         tool.Parent = player.Character
     end
+    
     
     
 
