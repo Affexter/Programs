@@ -1,195 +1,219 @@
--- AfexWare UT tool Draw script. (Works any game you can get alot of parts)
+local tooldraw = Instance.new("ScreenGui")
+local canvas = Instance.new("Frame")
+local undo = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
+local partCount = Instance.new("TextLabel")
+local UICorner_2 = Instance.new("UICorner")
+local heading = Instance.new("TextLabel")
+local X = Instance.new("TextButton")
 
+--Properties:
 
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
+tooldraw.Name = "tooldraw"
+tooldraw.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "AfexWareV1.0"
-screenGui.ResetOnSpawn = true
-screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+canvas.Name = "canvas"
+canvas.Parent = tooldraw
+canvas.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+canvas.BorderColor3 = Color3.fromRGB(0, 0, 0)
+canvas.BorderSizePixel = 3
+canvas.Position = UDim2.new(0.107591286, 0, 0.34321183, 0)
+canvas.Size = UDim2.new(0, 614, 0, 286)
 
-local mainFrame = Instance.new("Frame")
-mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 600, 0, 450)
-mainFrame.Position = UDim2.new(0.5, -300, 0.5, -225)
-mainFrame.BackgroundColor3 = Color3.new(1, 1, 1)
-mainFrame.BorderSizePixel = 2
-mainFrame.Parent = screenGui
+undo.Name = "undo"
+undo.Parent = canvas
+undo.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
+undo.BackgroundTransparency = 0.400
+undo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+undo.BorderSizePixel = 0
+undo.Position = UDim2.new(0.863454342, 0, 0.867436349, 0)
+undo.Size = UDim2.new(0, 65, 0, 31)
+undo.Font = Enum.Font.SourceSans
+undo.Text = "↩️"
+undo.TextColor3 = Color3.fromRGB(0, 0, 0)
+undo.TextSize = 21.000
+undo.TextWrapped = true
 
-local titleBar = Instance.new("Frame")
-titleBar.Name = "TitleBar"
-titleBar.Size = UDim2.new(1, 0, 0, 30)
-titleBar.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
-titleBar.Parent = mainFrame
+UICorner.CornerRadius = UDim.new(0.200000003, 8)
+UICorner.Parent = undo
 
-local titleText = Instance.new("TextLabel")
-titleText.Name = "TitleText"
-titleText.Size = UDim2.new(1, -60, 1, 0)
-titleText.Position = UDim2.new(0, 10, 0, 0)
-titleText.BackgroundTransparency = 1
-titleText.Text = "ToolDraw FE By Affexter"
-titleText.Font = Enum.Font.SourceSansBold
-titleText.TextColor3 = Color3.new(1, 1, 1)
-titleText.TextSize = 18
-titleText.TextXAlignment = Enum.TextXAlignment.Left
-titleText.Parent = titleBar
+partCount.Name = "partCount"
+partCount.Parent = canvas
+partCount.BackgroundColor3 = Color3.fromRGB(57, 57, 57)
+partCount.BorderColor3 = Color3.fromRGB(0, 0, 0)
+partCount.BorderSizePixel = 0
+partCount.Position = UDim2.new(-0.00112408074, 0, 1.03302538, 0)
+partCount.Size = UDim2.new(0, 265, 0, 36)
+partCount.Font = Enum.Font.SourceSansBold
+partCount.Text = "PARTS: 0/0"
+partCount.TextColor3 = Color3.fromRGB(0, 255, 0)
+partCount.TextScaled = true
+partCount.TextSize = 14.000
+partCount.TextWrapped = true
 
-local closeButton = Instance.new("TextButton")
-closeButton.Name = "CloseButton"
-closeButton.Size = UDim2.new(0, 30, 0, 30)
-closeButton.Position = UDim2.new(1, -30, 0, 0)
-closeButton.BackgroundColor3 = Color3.new(0.8, 0.2, 0.2)
-closeButton.Text = "X"
-closeButton.Font = Enum.Font.SourceSansBold
-closeButton.TextColor3 = Color3.new(1, 1, 1)
-closeButton.TextSize = 18
-closeButton.Parent = titleBar
+UICorner_2.CornerRadius = UDim.new(0.200000003, 8)
+UICorner_2.Parent = partCount
 
-local drawingArea = Instance.new("Frame")
-drawingArea.Name = "DrawingArea"
-drawingArea.Size = UDim2.new(1, -20, 1, -70)
-drawingArea.Position = UDim2.new(0, 10, 0, 40)
-drawingArea.BackgroundColor3 = Color3.new(0.95, 0.95, 0.95)
-drawingArea.BorderSizePixel = 1
-drawingArea.ClipsDescendants = true
-drawingArea.Parent = mainFrame
+heading.Name = "heading"
+heading.Parent = tooldraw
+heading.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+heading.BorderColor3 = Color3.fromRGB(67, 67, 67)
+heading.BorderSizePixel = 3
+heading.Position = UDim2.new(0.107591286, 0, 0.30526374, 0)
+heading.Size = UDim2.new(0, 614, 0, 26)
+heading.Font = Enum.Font.Unknown
+heading.Text = "Affexter Utilities: ToolEditor"
+heading.TextColor3 = Color3.fromRGB(47, 255, 0)
+heading.TextSize = 14.000
 
-local resetButton = Instance.new("TextButton")
-resetButton.Name = "ResetButton"
-resetButton.Size = UDim2.new(0, 80, 0, 25)
-resetButton.Position = UDim2.new(1, -90, 1, -35)
-resetButton.BackgroundColor3 = Color3.new(0.2, 0.6, 1)
-resetButton.Text = "Reset"
-resetButton.Font = Enum.Font.SourceSansBold
-resetButton.TextColor3 = Color3.new(1, 1, 1)
-resetButton.TextSize = 14
-resetButton.Parent = mainFrame
+X.Name = "X"
+X.Parent = heading
+X.BackgroundColor3 = Color3.fromRGB(0, 255, 42)
+X.BorderColor3 = Color3.fromRGB(0, 0, 0)
+X.BorderSizePixel = 0
+X.Position = UDim2.new(0.943230331, 0, 0.140418425, 0)
+X.Size = UDim2.new(0, 33, 0, 17)
+X.Font = Enum.Font.SourceSansBold
+X.Text = "X"
+X.TextColor3 = Color3.fromRGB(0, 0, 0)
+X.TextScaled = true
+X.TextSize = 14.000
+X.TextWrapped = true
 
-local Character = Players.LocalPlayer.Character
-local animate = Character:FindFirstChild('Animate')
-if animate then
-    animate:Destroy()
+-- Scripts:
+local function XQFJOB_fake_script() -- canvas.drawsScript 
+    local player = game:GetService('Players').LocalPlayer
+	local script = Instance.new('LocalScript', canvas)
+
+	local frame = script.Parent
+	local isDrawing = false
+	
+	local toolGripOffset = Vector3.new(-30, -40, 0)
+
+	local function toolLogic(pos)
+        local backpack = player.Backpack:GetChildren()
+        local canvasSize = frame.Size
+        local canvasWidth = canvasSize.X.Offset
+        local canvasHeight = canvasSize.Y.Offset
+    
+        local gripPosition = Vector3.new(
+            (pos.X / canvasWidth) * 40 - 1,
+            (pos.Y / canvasHeight) * 20 - 1,
+            0
+        ) + toolGripOffset
+    
+        local tool = backpack[1]
+
+        tool.Grip = CFrame.new(gripPosition)
+
+        tool.Parent = player.Character
+    end
+    
+    
+
+	local function createDot(position)
+		local dot = Instance.new("Frame")
+		dot.Size = UDim2.new(0, 5, 0, 5)
+		dot.Position = UDim2.new(0, position.X - frame.AbsolutePosition.X, 0, position.Y - frame.AbsolutePosition.Y)
+		dot.BackgroundColor3 = Color3.new(0, 0, 0)
+		dot.BorderSizePixel = 0
+		dot.Parent = frame
+
+		toolLogic(position)
+	end
+	
+	frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			isDrawing = true
+			createDot(input.Position)
+		end
+	end)
+	
+	frame.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			isDrawing = false
+		end
+	end)
+	
+	frame.InputChanged:Connect(function(input)
+		if isDrawing and input.UserInputType == Enum.UserInputType.MouseMovement then
+			createDot(input.Position)
+		end
+	end)
 end
+coroutine.wrap(XQFJOB_fake_script)()
 
-local function createPixel(position)
-    local pixel = Instance.new("Frame")
-    pixel.Size = UDim2.new(0, 5, 0, 5)
-    pixel.Position = UDim2.new(0, position.X - 2, 0, position.Y - 2)
-    pixel.BackgroundColor3 = Color3.new(0, 0, 0)
-    pixel.BorderSizePixel = 0
-    pixel.Parent = drawingArea
-    return position
+local function QYOUZ_fake_script() -- undo.LocalScript 
+	local script = Instance.new('LocalScript', undo)
+
+	local button = script.Parent
+	local canvas = button.Parent
+	
+	local function reset()
+		for _, line in ipairs(canvas:GetChildren()) do
+			if line:IsA("Frame") then
+				line:Destroy()
+			end
+		end
+	end
+	
+	button.Activated:Connect(reset)
 end
+coroutine.wrap(QYOUZ_fake_script)()
+local function XMLK_fake_script() -- heading.LocalScript 
+	local script = Instance.new('LocalScript', heading)
 
-local player = game:GetService('Players').LocalPlayer
-local char = player.Character
-
-local function treeDraw(pos)
-    local tools = player.Backpack:GetChildren()
-
-    if #tools > 0 then
-        local tool = tools[1]
-        local ls = tool:WaitForChild('LocalScript')
-
-        if ls then
-            ls:Destroy()
-        end
-
-        if tool:FindFirstChild("Handle") and tool.Name == 'Spray' then
-            tool.Parent = char
-
-            local gripOffset = Vector3.new(pos.X / 10, 0, pos.Y / 10)
-
-            tool.Grip = CFrame.new(gripOffset)
-
-            local rotation = CFrame.Angles(math.rad(90), 0, 0)
-            tool.Grip = tool.Grip * rotation
-        end
-    else
-        print('no tool')
-    end
+	local UserInputService = game:GetService("UserInputService")
+	
+	local header = script.Parent
+	local canvas = script.Parent.Parent.canvas
+	
+	local dragging = false
+	local dragStart, startPos
+	
+	local function onInputBegan(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragStart = input.Position
+			startPos = header.Position
+	
+			canvasStartPos = canvas.Position
+	
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end
+	
+	local function onInputChanged(input)
+		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+			local delta = input.Position - dragStart
+	
+			header.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	
+			canvas.Position = UDim2.new(canvasStartPos.X.Scale, canvasStartPos.X.Offset + delta.X, canvasStartPos.Y.Scale, canvasStartPos.Y.Offset + delta.Y)
+		end
+	end
+	
+	-- Connect events
+	header.InputBegan:Connect(onInputBegan)
+	UserInputService.InputChanged:Connect(onInputChanged)
+	
+	
 end
+coroutine.wrap(XMLK_fake_script)()
+local function FKUSJ_fake_script() -- X.LocalScript 
+	local script = Instance.new('LocalScript', X)
 
-
-
-
-local function handleDrawing(input)
-    local position = Vector2.new(
-        input.Position.X - drawingArea.AbsolutePosition.X,
-        input.Position.Y - drawingArea.AbsolutePosition.Y
-    )
-    if position.X >= 0 and position.X <= drawingArea.AbsoluteSize.X and
-       position.Y >= 0 and position.Y <= drawingArea.AbsoluteSize.Y then
-        createPixel(position)
-        treeDraw(position)
-    end
+	local button = script.Parent
+	local gui = button.Parent.Parent
+	
+	local function closeGUI()
+		gui:Destroy()
+	end
+	
+	button.Activated:Connect(closeGUI)
 end
-
-
-local drawing = false
-
-drawingArea.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or
-       input.UserInputType == Enum.UserInputType.Touch then
-        drawing = true
-        handleDrawing(input)
-    end
-end)
-
-drawingArea.InputChanged:Connect(function(input)
-    if drawing and (input.UserInputType == Enum.UserInputType.MouseMovement or
-                    input.UserInputType == Enum.UserInputType.Touch) then
-        handleDrawing(input)
-    end
-end)
-
-drawingArea.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or
-       input.UserInputType == Enum.UserInputType.Touch then
-        drawing = false
-    end
-end)
-
-local dragging
-local dragStart
-local startPos
-
-titleBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or
-       input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = mainFrame.Position
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or
-                     input.UserInputType == Enum.UserInputType.Touch) then
-        local delta = input.Position - dragStart
-        mainFrame.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-        )
-    end
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or
-       input.UserInputType == Enum.UserInputType.Touch then
-        dragging = false
-    end
-end)
-
-closeButton.MouseButton1Click:Connect(function()
-    screenGui:Destroy()
-end)
-
-resetButton.MouseButton1Click:Connect(function()
-    for _, child in pairs(drawingArea:GetChildren()) do
-        child:Destroy()
-    end
-end)
+coroutine.wrap(FKUSJ_fake_script)()
