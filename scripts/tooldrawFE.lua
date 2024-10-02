@@ -220,12 +220,19 @@ local function XMLK_fake_script()
         canvas.Position = UDim2.new(canvasStartPos.X.Scale, canvasStartPos.X.Offset + delta.X, canvasStartPos.Y.Scale, canvasStartPos.Y.Offset + delta.Y)
     end
     
-    local function onInputBegan(input)
-        if (input.UserInputType == Enum.UserInputType.MouseButton1 or 
-            input.UserInputType == Enum.UserInputType.Touch) and 
-           input.Position.Y - header.AbsolutePosition.Y <= header.AbsoluteSize.Y then
+    local function onInputBegan(input, gameProcessed)
+        if gameProcessed then return end
+        
+        local inputPosition = input.Position
+        local headerPosition = header.AbsolutePosition
+        local headerSize = header.AbsoluteSize
+        
+        -- Check if the input is within the header bounds
+        if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and
+           inputPosition.X >= headerPosition.X and inputPosition.X <= headerPosition.X + headerSize.X and
+           inputPosition.Y >= headerPosition.Y and inputPosition.Y <= headerPosition.Y + headerSize.Y then
             dragging = true
-            dragStart = input.Position
+            dragStart = inputPosition
             startPos = header.Position
             canvasStartPos = canvas.Position
             
@@ -237,7 +244,9 @@ local function XMLK_fake_script()
         end
     end
     
-    local function onInputChanged(input)
+    local function onInputChanged(input, gameProcessed)
+        if gameProcessed then return end
+        
         if dragging and 
            (input.UserInputType == Enum.UserInputType.MouseMovement or 
             input.UserInputType == Enum.UserInputType.Touch) then
