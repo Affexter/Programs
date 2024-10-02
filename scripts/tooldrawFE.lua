@@ -147,14 +147,15 @@ local function XQFJOB_fake_script() -- canvas.drawsScript
 		dot.BackgroundColor3 = Color3.new(0, 0, 0)
 		dot.BorderSizePixel = 0
 		dot.Parent = frame
-
-		toolLogic(position)
+        toolLogic(position)
 	end
 	
 	frame.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			isDrawing = true
-			createDot(input.Position)
+            if not (used >= total) then
+                isDrawing = true
+                createDot(input.Position)
+            end
 		end
 	end)
 	
@@ -187,6 +188,8 @@ local function QYOUZ_fake_script() -- undo.LocalScript
             for _, tool in ipairs(player.Character:GetChildren()) do
                 if tool:IsA("Tool") then
                     tool.Parent = backpack
+                    
+        used = 0
                 end
             end
         end
