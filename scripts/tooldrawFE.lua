@@ -80,6 +80,28 @@ X.TextScaled = true
 X.TextSize = 14.000
 X.TextWrapped = true
 
+local player = game:GetService('Players').LocalPlayer
+local RunService = game:GetService("RunService")
+
+local backpack = player.Backpack:GetChildren()
+
+local total = #backpack
+local used = 0
+
+local function UTG()
+    total = #backpack
+    partCount.Text = "PARTS: " .. used .. "/" .. total
+
+    if used >= total then
+        partCount.TextColor3 = Color3.fromRGB(255, 0, 0)
+    else
+        partCount.TextColor3 = Color3.fromRGB(0, 255, 42)
+    end
+end
+
+RunService.Heartbeat:Connect(UTG)
+
+
 -- Scripts:
 local function XQFJOB_fake_script() -- canvas.drawsScript 
     local player = game:GetService('Players').LocalPlayer
@@ -104,14 +126,15 @@ local function XQFJOB_fake_script() -- canvas.drawsScript
     
         local tool = backpack[1]
     
-        -- Define rotation
-        local rotationAngle = math.rad(45) -- Set rotation angle in radians
-        local rotationCFrame = CFrame.Angles(0, rotationAngle, 0) -- Rotate around Y axis (adjust axes as needed)
-    
-        -- Combine grip position with rotation
-        tool.Grip = CFrame.new(gripPosition) * rotationCFrame
+        tool.Grip = CFrame.new(gripPosition)
+
+        if tool:FindFirstChild('LocalScript') then
+            tool.LocalScript:Destroy()
+        end
     
         tool.Parent = player.Character
+        used = used + 1
+        UTG()
     end
     
     
@@ -151,7 +174,8 @@ coroutine.wrap(XQFJOB_fake_script)()
 
 local function QYOUZ_fake_script() -- undo.LocalScript 
 	local script = Instance.new('LocalScript', undo)
-
+    local player = game:GetService("Players").LocalPlayer
+    local backpack = player.Backpack
 	local button = script.Parent
 	local canvas = button.Parent
 	
@@ -159,9 +183,15 @@ local function QYOUZ_fake_script() -- undo.LocalScript
 		for _, line in ipairs(canvas:GetChildren()) do
 			if line:IsA("Frame") then
 				line:Destroy()
-			end
-		end
-	end
+
+            for _, tool in ipairs(player.Character:GetChildren()) do
+                if tool:IsA("Tool") then
+                    tool.Parent = backpack
+                end
+            end
+        end
+    end
+end
 	
 	button.Activated:Connect(reset)
 end
