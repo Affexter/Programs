@@ -85,7 +85,7 @@ local player = game:GetService('Players').LocalPlayer
 local RunService = game:GetService("RunService")
 
 local used = 0
-
+ 
 local function UTG()
     local backpack = player.Backpack:GetChildren()
     local total = #backpack
@@ -113,7 +113,7 @@ local function XQFJOB_fake_script()
     local frame = script.Parent
     local isDrawing = false
     
-    local toolGripOffset = Vector3.new(-25, -15, 0)
+    local toolGripOffset = Vector3.new(-27, -20, 0)
 
     local function toolLogic(pos)
         local backpack = player.Backpack:GetChildren()
@@ -123,7 +123,7 @@ local function XQFJOB_fake_script()
     
         -- Adjusting for the canvas's position to get the correct grip position
         local gripPosition = Vector3.new(
-            ((pos.X - frame.AbsolutePosition.X) / canvasWidth) * 40 - 1,
+            ((pos.X - frame.AbsolutePosition.X) / canvasWidth) * 60 - 1,
             ((pos.Y - frame.AbsolutePosition.Y) / canvasHeight) * 20 - 1,
             0
         ) + toolGripOffset
