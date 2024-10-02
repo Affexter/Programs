@@ -99,8 +99,6 @@ local function UTG()
     end
 end
 
-RunService.Heartbeat:Connect(UTG)
-
 
 -- Scripts:
 local function XQFJOB_fake_script() -- canvas.drawsScript 
@@ -200,47 +198,43 @@ end
 end
 coroutine.wrap(QYOUZ_fake_script)()
 local function XMLK_fake_script() -- heading.LocalScript 
-	local script = Instance.new('LocalScript', heading)
+    local script = Instance.new('LocalScript', heading)
 
-	local UserInputService = game:GetService("UserInputService")
+    local UserInputService = game:GetService("UserInputService")
 	
-	local header = script.Parent
-	local canvas = script.Parent.Parent.canvas
+    local header = script.Parent
+    local canvas = script.Parent.Parent.canvas
 	
-	local dragging = false
-	local dragStart, startPos
+    local dragging = false
+    local dragStart, startPos
 	
-	local function onInputBegan(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			dragging = true
-			dragStart = input.Position
-			startPos = header.Position
+    local function onInputBegan(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = header.Position
+            canvasStartPos = canvas.Position
 	
-			canvasStartPos = canvas.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end
 	
-			input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
-					dragging = false
-				end
-			end)
-		end
-	end
+    local function onInputChanged(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position - dragStart
 	
-	local function onInputChanged(input)
-		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-			local delta = input.Position - dragStart
-	
-			header.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-	
-			canvas.Position = UDim2.new(canvasStartPos.X.Scale, canvasStartPos.X.Offset + delta.X, canvasStartPos.Y.Scale, canvasStartPos.Y.Offset + delta.Y)
-		end
-	end
-	
-	-- Connect events
-	header.InputBegan:Connect(onInputBegan)
-	UserInputService.InputChanged:Connect(onInputChanged)
-	
-	
+            header.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            canvas.Position = UDim2.new(canvasStartPos.X.Scale, canvasStartPos.X.Offset + delta.X, canvasStartPos.Y.Scale, canvasStartPos.Y.Offset + delta.Y)
+        end
+    end
+
+    -- Connect the input events only when hovering over the header
+    header.InputBegan:Connect(onInputBegan)
+    UserInputService.InputChanged:Connect(onInputChanged)
 end
 coroutine.wrap(XMLK_fake_script)()
 local function FKUSJ_fake_script() -- X.LocalScript 
