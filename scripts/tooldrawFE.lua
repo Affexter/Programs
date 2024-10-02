@@ -113,7 +113,7 @@ local function XQFJOB_fake_script()
     local frame = script.Parent
     local isDrawing = false
     
-    local toolGripOffset = Vector3.new(-30, -40, 0)
+    local toolGripOffset = Vector3.new(-25, -15, 0)
 
     local function toolLogic(pos)
         local backpack = player.Backpack:GetChildren()
@@ -121,9 +121,10 @@ local function XQFJOB_fake_script()
         local canvasWidth = canvasSize.X.Offset
         local canvasHeight = canvasSize.Y.Offset
     
+        -- Adjusting for the canvas's position to get the correct grip position
         local gripPosition = Vector3.new(
-            (pos.X / canvasWidth) * 40 - 1,
-            (pos.Y / canvasHeight) * 20 - 1,
+            ((pos.X - frame.AbsolutePosition.X) / canvasWidth) * 40 - 1,
+            ((pos.Y - frame.AbsolutePosition.Y) / canvasHeight) * 20 - 1,
             0
         ) + toolGripOffset
     
@@ -177,7 +178,9 @@ local function XQFJOB_fake_script()
         end
     end)
 end
+
 coroutine.wrap(XQFJOB_fake_script)()
+
 
 local function QYOUZ_fake_script()
     local script = Instance.new('LocalScript', undo)
