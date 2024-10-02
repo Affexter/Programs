@@ -124,7 +124,7 @@ local function XQFJOB_fake_script()
         -- Adjusting for the canvas's position to get the correct grip position
         local gripPosition = Vector3.new(
             ((pos.X - frame.AbsolutePosition.X) / canvasWidth) * 60 - 1,
-            ((pos.Y - frame.AbsolutePosition.Y) / canvasHeight) * 20 - 1,
+            ((pos.Y - frame.AbsolutePosition.Y) / canvasHeight) * 25 - 1,
             0
         ) + toolGripOffset
     
