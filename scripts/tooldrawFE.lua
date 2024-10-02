@@ -7,10 +7,11 @@ local UICorner_2 = Instance.new("UICorner")
 local heading = Instance.new("TextLabel")
 local X = Instance.new("TextButton")
 
---Properties:
+-- Properties:
 
 tooldraw.Name = "tooldraw"
 tooldraw.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+tooldraw.ResetOnSpawn = false
 
 canvas.Name = "canvas"
 canvas.Parent = tooldraw
@@ -83,13 +84,16 @@ X.TextWrapped = true
 local player = game:GetService('Players').LocalPlayer
 local RunService = game:GetService("RunService")
 
-local backpack = player.Backpack:GetChildren()
-
-local total = #backpack
 local used = 0
 
 local function UTG()
-    total = #backpack
+    local backpack = player.Backpack:GetChildren()
+    local total = #backpack
+    for _, tool in ipairs(player.Character:GetChildren()) do
+        if tool:IsA("Tool") then
+            total = total + 1
+        end
+    end
     partCount.Text = "PARTS: " .. used .. "/" .. total
 
     if used >= total then
@@ -99,18 +103,19 @@ local function UTG()
     end
 end
 
+-- Update the GUI every frame
+RunService.RenderStepped:Connect(UTG)
 
 -- Scripts:
-local function XQFJOB_fake_script() -- canvas.drawsScript 
-    local player = game:GetService('Players').LocalPlayer
-	local script = Instance.new('LocalScript', canvas)
+local function XQFJOB_fake_script()
+    local script = Instance.new('LocalScript', canvas)
 
-	local frame = script.Parent
-	local isDrawing = false
-	
-	local toolGripOffset = Vector3.new(-30, -40, 0)
+    local frame = script.Parent
+    local isDrawing = false
+    
+    local toolGripOffset = Vector3.new(-30, -40, 0)
 
-	local function toolLogic(pos)
+    local function toolLogic(pos)
         local backpack = player.Backpack:GetChildren()
         local canvasSize = frame.Size
         local canvasWidth = canvasSize.X.Offset
@@ -123,98 +128,107 @@ local function XQFJOB_fake_script() -- canvas.drawsScript
         ) + toolGripOffset
     
         local tool = backpack[1]
-    
-        tool.Grip = CFrame.new(gripPosition)
-
-        if tool:FindFirstChild('LocalScript') then
-            tool.LocalScript:Destroy()
+        if tool then
+            if tool:FindFirstChild('LocalScript') then
+                tool.LocalScript:Destroy()
+            end
+        
+            tool.Grip = CFrame.new(gripPosition)
+            tool.Parent = player.Character
+            used = used + 1
+            UTG()
         end
-    
-        tool.Parent = player.Character
-        used = used + 1
-        UTG()
+    end
+
+    local function createDot(position)
+        local dot = Instance.new("Frame")
+        dot.Size = UDim2.new(0, 5, 0, 5)
+        dot.Position = UDim2.new(0, position.X - frame.AbsolutePosition.X, 0, position.Y - frame.AbsolutePosition.Y)
+        dot.BackgroundColor3 = Color3.new(0, 0, 0)
+        dot.BorderSizePixel = 0
+        dot.Parent = frame
+        toolLogic(position)
     end
     
-    
-    
-
-	local function createDot(position)
-		local dot = Instance.new("Frame")
-		dot.Size = UDim2.new(0, 5, 0, 5)
-		dot.Position = UDim2.new(0, position.X - frame.AbsolutePosition.X, 0, position.Y - frame.AbsolutePosition.Y)
-		dot.BackgroundColor3 = Color3.new(0, 0, 0)
-		dot.BorderSizePixel = 0
-		dot.Parent = frame
-        toolLogic(position)
-	end
-	
-	frame.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            if not (used >= total) then
+    local function handleInput(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or 
+           input.UserInputType == Enum.UserInputType.Touch then
+            local backpack = player.Backpack:GetChildren()
+            if #backpack > 0 then
                 isDrawing = true
                 createDot(input.Position)
             end
-		end
-	end)
-	
-	frame.InputEnded:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			isDrawing = false
-		end
-	end)
-	
-	frame.InputChanged:Connect(function(input)
-		if isDrawing and input.UserInputType == Enum.UserInputType.MouseMovement then
-			createDot(input.Position)
-		end
-	end)
+        end
+    end
+    
+    frame.InputBegan:Connect(handleInput)
+    
+    frame.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or 
+           input.UserInputType == Enum.UserInputType.Touch then
+            isDrawing = false
+        end
+    end)
+    
+    frame.InputChanged:Connect(function(input)
+        if isDrawing and (input.UserInputType == Enum.UserInputType.MouseMovement or 
+                          input.UserInputType == Enum.UserInputType.Touch) then
+            createDot(input.Position)
+        end
+    end)
 end
 coroutine.wrap(XQFJOB_fake_script)()
 
-local function QYOUZ_fake_script() -- undo.LocalScript 
-	local script = Instance.new('LocalScript', undo)
-    local player = game:GetService("Players").LocalPlayer
-    local backpack = player.Backpack
-	local button = script.Parent
-	local canvas = button.Parent
-	
-	local function reset()
-		for _, line in ipairs(canvas:GetChildren()) do
-			if line:IsA("Frame") then
-				line:Destroy()
-
-            for _, tool in ipairs(player.Character:GetChildren()) do
-                if tool:IsA("Tool") then
-                    tool.Parent = backpack
-                    
-        used = 0
-                end
+local function QYOUZ_fake_script()
+    local script = Instance.new('LocalScript', undo)
+    local button = script.Parent
+    local canvas = button.Parent
+    
+    local function reset()
+        for _, line in ipairs(canvas:GetChildren()) do
+            if line:IsA("Frame") then
+                line:Destroy()
             end
         end
+        for _, tool in ipairs(player.Character:GetChildren()) do
+            if tool:IsA("Tool") then
+                tool.Parent = player.Backpack
+            end
+        end
+        used = 0
+        UTG()
     end
-end
-	
-	button.Activated:Connect(reset)
+    
+    button.Activated:Connect(reset)
 end
 coroutine.wrap(QYOUZ_fake_script)()
-local function XMLK_fake_script() -- heading.LocalScript 
+
+local function XMLK_fake_script()
     local script = Instance.new('LocalScript', heading)
 
     local UserInputService = game:GetService("UserInputService")
-	
+    
     local header = script.Parent
     local canvas = script.Parent.Parent.canvas
-	
+    
     local dragging = false
     local dragStart, startPos
-	
+    
+    local function updatePosition(input)
+        local delta = input.Position - dragStart
+        header.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        canvas.Position = UDim2.new(canvasStartPos.X.Scale, canvasStartPos.X.Offset + delta.X, canvasStartPos.Y.Scale, canvasStartPos.Y.Offset + delta.Y)
+    end
+    
     local function onInputBegan(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        if (input.UserInputType == Enum.UserInputType.MouseButton1 or 
+            input.UserInputType == Enum.UserInputType.Touch) and 
+           input.Position.Y - header.AbsolutePosition.Y <= header.AbsoluteSize.Y then
             dragging = true
             dragStart = input.Position
             startPos = header.Position
             canvasStartPos = canvas.Position
-	
+            
             input.Changed:Connect(function()
                 if input.UserInputState == Enum.UserInputState.End then
                     dragging = false
@@ -222,31 +236,30 @@ local function XMLK_fake_script() -- heading.LocalScript
             end)
         end
     end
-	
+    
     local function onInputChanged(input)
-        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-            local delta = input.Position - dragStart
-	
-            header.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-            canvas.Position = UDim2.new(canvasStartPos.X.Scale, canvasStartPos.X.Offset + delta.X, canvasStartPos.Y.Scale, canvasStartPos.Y.Offset + delta.Y)
+        if dragging and 
+           (input.UserInputType == Enum.UserInputType.MouseMovement or 
+            input.UserInputType == Enum.UserInputType.Touch) then
+            updatePosition(input)
         end
     end
-
-    -- Connect the input events only when hovering over the header
-    header.InputBegan:Connect(onInputBegan)
+    
+    UserInputService.InputBegan:Connect(onInputBegan)
     UserInputService.InputChanged:Connect(onInputChanged)
 end
 coroutine.wrap(XMLK_fake_script)()
-local function FKUSJ_fake_script() -- X.LocalScript 
-	local script = Instance.new('LocalScript', X)
 
-	local button = script.Parent
-	local gui = button.Parent.Parent
-	
-	local function closeGUI()
-		gui:Destroy()
-	end
-	
-	button.Activated:Connect(closeGUI)
+local function FKUSJ_fake_script()
+    local script = Instance.new('LocalScript', X)
+
+    local button = script.Parent
+    local gui = button.Parent.Parent
+    
+    local function closeGUI()
+        gui:Destroy()
+    end
+    
+    button.Activated:Connect(closeGUI)
 end
 coroutine.wrap(FKUSJ_fake_script)()
