@@ -103,7 +103,6 @@ local function UTG()
     end
 end
 
--- Update the GUI every frame
 RunService.RenderStepped:Connect(UTG)
 
 -- Scripts:
@@ -121,7 +120,6 @@ local function XQFJOB_fake_script()
         local canvasWidth = canvasSize.X.Offset
         local canvasHeight = canvasSize.Y.Offset
     
-        -- Adjusting for the canvas's position to get the correct grip position
         local gripPosition = Vector3.new(
             ((pos.X - frame.AbsolutePosition.X) / canvasWidth) * 60 - 1,
             ((pos.Y - frame.AbsolutePosition.Y) / canvasHeight) * 25 - 1,
@@ -230,7 +228,6 @@ local function XMLK_fake_script()
         local headerPosition = header.AbsolutePosition
         local headerSize = header.AbsoluteSize
         
-        -- Check if the input is within the header bounds
         if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and
            inputPosition.X >= headerPosition.X and inputPosition.X <= headerPosition.X + headerSize.X and
            inputPosition.Y >= headerPosition.Y and inputPosition.Y <= headerPosition.Y + headerSize.Y then
